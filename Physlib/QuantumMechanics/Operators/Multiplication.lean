@@ -128,6 +128,42 @@ lemma mulOperator_apply_ae {μ : Measure (Space d)} {f : Space d → ℂ} (ψ : 
 ## B. Domain
 -/
 
+/-- The multiplication operator of a `μ`-a.e. bounded function has full domain. -/
+lemma mulOperator_domain_eq_top {μ : Measure (Space d)}
+    {f : Space d → ℂ} (hf : AEStronglyMeasurable f μ) {c : ℝ} (hfc : ∀ᵐ x ∂μ, ‖f x‖ ≤ c) :
+    (𝓜 μ f).domain = ⊤ := by
+  refine Submodule.eq_top_iff'.mpr fun ψ ↦ ?_
+  refine ((memHS_coe ψ).const_smul c).mono (by fun_prop) ?_
+  filter_upwards [hfc] with x h
+  simp only [smul_eq_mul, norm_mul, Pi.smul_apply, Pi.smul_apply']
+  exact mul_le_mul_of_nonneg_right (h.trans <| by simp [le_abs_self]) (norm_nonneg _)
+
+/-- The domains of multiplication operators shrink with increasing function norm. -/
+lemma mulOperator_domain_antitone {μ : Measure (Space d)}
+    {f g : Space d → ℂ} (hg : AEStronglyMeasurable g μ) (h : ∀ᵐ x ∂μ, ‖g x‖ ≤ ‖f x‖) :
+    (𝓜 μ f).domain ≤ (𝓜 μ g).domain := by
+  intro ψ hψ
+  refine hψ.mono (by fun_prop) ?_
+  filter_upwards [h]
+  simp_all [mul_le_mul_of_nonneg_right]
+
+/-- The multiplication operators corresponding to functions
+  of `μ`-a.e. equal norm have the same domain. -/
+lemma mulOperator_domain_eq_of_congr_norm {μ : Measure (Space d)} {f g : Space d → ℂ}
+    (hf : AEStronglyMeasurable f μ) (hg : AEStronglyMeasurable g μ) (h : ∀ᵐ x ∂μ, ‖f x‖ = ‖g x‖) :
+    (𝓜 μ f).domain = (𝓜 μ g).domain := by
+  ext ψ
+  refine memHS_congr_norm (by fun_prop) (by fun_prop) ?_
+  filter_upwards [h]
+  simp_all
+
+/-- The multiplication operators corresponding to a function
+  and its conjugate have the same domain. -/
+lemma mulOperator_conj_domain
+    {μ : Measure (Space d)} {f : Space d → ℂ} (hf : AEStronglyMeasurable f μ) :
+    (𝓜 μ (conj ∘ f)).domain = (𝓜 μ f).domain :=
+  mulOperator_domain_eq_of_congr_norm (by fun_prop) hf (by simp)
+
 /-- The multiplication operator corresponding to a `μ`-a.e. strongly measurable function
   is densely defined. -/
 lemma mulOperator_hasDenseDomain
@@ -185,19 +221,9 @@ lemma mulOperator_domain_ge_of_hasTemperateGrowth {f : Space d → ℂ} (hf : f.
   intro ψ hψ
   obtain ⟨g, hg⟩ := (schwartzEquiv μ).surjective ⟨ψ, hψ⟩
   let w : 𝓢(Space d, ℂ) := smulLeftCLM ℂ f g
-  let φ : SpaceDHilbertSpace d μ := schwartzEquiv μ w
-  refine (memHS_coe φ).ae_eq ?_
-  filter_upwards [schwartzEquiv_coe_ae w, schwartzEquiv_coe_ae g] with x h₁ h₂
-  simp [w, φ, h₁, ← h₂, hg, smulLeftCLM_apply_apply hf]
-
-/-- The multiplication operators corresponding to a function
-  and its conjugate have the same domain. -/
-lemma mulOperator_conj_domain
-    {μ : Measure (Space d)} {f : Space d → ℂ} (hf : AEStronglyMeasurable f μ) :
-    (𝓜 μ (conj ∘ f)).domain = (𝓜 μ f).domain := by
-  ext
-  simp only [mulOperator, smul_eq_mul, memHS_iff]
-  exact and_congr (iff_of_true (by fun_prop) (by fun_prop)) (by simp)
+  refine (memHS_coe <| schwartzEquiv μ w).ae_eq ?_
+  filter_upwards [schwartzEquiv_coe_ae w, schwartzEquiv_coe_ae g]
+  simp_all [w, smulLeftCLM_apply_apply hf]
 
 /-!
 ## C. Adjoint
