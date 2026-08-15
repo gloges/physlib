@@ -6,8 +6,11 @@ Authors: Gregory J. Loges
 module
 
 public import Physlib.Mathematics.InnerProductSpace.Gaussian
+public import Physlib.Mathematics.KroneckerDelta.Basic
 public import Physlib.Mathematics.SpecialFunctions.PhysHermite
 public import Physlib.QuantumMechanics.HarmonicOscillator.Basic
+public import Physlib.QuantumMechanics.HilbertSpaces.SpaceD.SchwartzSubmodule
+public import Physlib.Meta.Sorry
 /-!
 
 # Energy eigenstates of the quantum harmonic oscillator
@@ -21,6 +24,7 @@ public import Physlib.QuantumMechanics.HarmonicOscillator.Basic
 - A. Energy eigenvalues
 - B. Cartesian basis
   - B.1. Eigenfunctions
+  - B.2. Eigenstates
 
 ## iv. References
 
@@ -99,6 +103,23 @@ lemma eigenfunction_apply :
   rw [eigenfunction_eq, compCLMOfContinuousLinearEquiv_apply, Function.comp_apply,
     smulLeftCLM_apply_apply (by fun_prop), ξEquiv_symm_apply]
   simp [div_eq_mul_inv, prod_mul_distrib, exp_neg, norm_sq_eq, mul_sum, mul_comm, exp_sum]
+
+/-!
+### B.2. Eigenstates
+-/
+
+def eigenstate : SchwartzSubmodule d := schwartzEquiv _ (Q.eigenfunction n)
+
+lemma eigenstate_eq : Q.eigenstate n = schwartzEquiv _ (Q.eigenfunction n) := rfl
+
+/-- The energy eigenstates are orthonormal. -/
+@[simp, sorryful]
+lemma eigenstates_orthonormal : ⟪Q.eigenstate n, Q.eigenstate n'⟫_ℂ = δ[n,n'] :=
+  -- It might help to first prove an analogue of
+  -- `MeasureTheory.integral_fin_nat_prod_(volume_)eq_prod` for `Space d` in order to split
+  -- `∫ x : Space d, Π i : Fin d, fᵢ (x i) = ∏ i : Fin d, ∫ xᵢ : ℝ, fᵢ xᵢ`.
+  sorry
+
 end HarmonicOscillator
 end QuantumMechanics
 end
