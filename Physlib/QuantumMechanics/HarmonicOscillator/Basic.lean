@@ -51,15 +51,6 @@ in `d` dimensions.
 
 @[expose] public section
 
-TODO "Determine the spectrum of the quantum harmonic oscillator in terms of
-  the natural frequencies and integer quantum numbers."
-
-TODO "Determine the energy eigenstates of the quantum harmonic oscillator
-  in the 'Cartesian basis' in terms of Hermite polynomials."
-
-TODO "Determine the energy eigenstates of the isotropic quantum harmonic oscillator
-  in the 'spherical basis' in terms of spherical harmonics."
-
 noncomputable section
 namespace QuantumMechanics
 

@@ -31,6 +31,17 @@ public import Physlib.Meta.Sorry
 -/
 @[expose] public section
 
+TODO "Prove that the QHO eigenstates in the Cartesian basis (Hermite polynomials) are orthonormal."
+
+TODO "Prove that the QHO eigenstates in the Cartesian basis (Hermite polynomials) satisfy the TISE."
+
+TODO "Prove that the (point) spectrum of the self-adjoint Hamiltonian is `Set.range Q.eigenEnergy`."
+
+TODO "Prove that the ground-state of the QHO is non-degenerate."
+
+TODO "Determine the energy eigenstates of the isotropic quantum harmonic oscillator
+  in the 'spherical basis' in terms of spherical harmonics."
+
 noncomputable section
 namespace QuantumMechanics
 namespace HarmonicOscillator
