@@ -32,6 +32,7 @@ in `d` dimensions.
   - A.1. Positive mass
   - A.2. Positive natural frequencies
 - B. Characteristic lengths
+  - B.1. Coordinate rescaling
 - C. The quadratic potential function
   - C.1. Positive-definite matrix
   - C.2. Quadratic form
@@ -130,6 +131,23 @@ lemma ξ_sq : (Q.ξ i) ^ 2 = ℏ / (Q.m * Q.ω i) := by rw [Q.ξ_eq]; field_simp
 lemma ξ_inv : (Q.ξ i)⁻¹ = √Q.m * √(Q.ω i) / √ℏ := by simp [ξ_eq]
 
 lemma ξ_inv' : (Q.ξ i)⁻¹ = Q.m * Q.ω i * Q.ξ i / ℏ := by field_simp; simp [ξ_sq, mul_assoc]
+
+/-!
+### B.1. Coordinate rescaling
+-/
+
+/-- The continuous linear equivalence which rescales `xᵢ` to `ξᵢxᵢ`. -/
+def ξEquiv : Space d ≃L[ℝ] Space d where
+  toFun x := ⟨fun i ↦ Q.ξ i * x i⟩
+  invFun x := ⟨fun i ↦ (Q.ξ i)⁻¹ * x i⟩
+  map_add' _ _ := by ext; simp [mul_add]
+  map_smul' _ _ := by ext; simp [mul_left_comm]
+  left_inv _ := by simp
+  right_inv _ := by simp
+
+lemma ξEquiv_apply (x : Space d) : Q.ξEquiv x = ⟨fun i ↦ Q.ξ i * x i⟩ := rfl
+
+lemma ξEquiv_symm_apply (x : Space d) : Q.ξEquiv.symm x = ⟨fun i ↦ (Q.ξ i)⁻¹ * x i⟩ := rfl
 
 /-!
 ## C. The quadratic potential function
