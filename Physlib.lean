@@ -307,6 +307,7 @@ public import Physlib.QFT.QED.AnomalyCancellation.VectorLike
 public import Physlib.QuantumMechanics.FiniteTarget
 public import Physlib.QuantumMechanics.FreeParticle.Basic
 public import Physlib.QuantumMechanics.HarmonicOscillator.Basic
+public import Physlib.QuantumMechanics.HarmonicOscillator.Eigenstates
 public import Physlib.QuantumMechanics.HarmonicOscillator.LadderOperators
 public import Physlib.QuantumMechanics.HarmonicOscillator.OneDimension.Basic
 public import Physlib.QuantumMechanics.HarmonicOscillator.OneDimension.Completeness
