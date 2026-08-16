@@ -6,6 +6,7 @@ Authors: Gregory J. Loges
 module
 
 public import Physlib.Mathematics.InnerProductSpace.Gaussian
+public import Physlib.Mathematics.HasTemperateGrowth
 public import Physlib.Mathematics.KroneckerDelta.Basic
 public import Physlib.Mathematics.SpecialFunctions.PhysHermite
 public import Physlib.QuantumMechanics.HarmonicOscillator.Basic
@@ -71,12 +72,6 @@ lemma eigenEnergy_strictMono : StrictMono Q.eigenEnergy := by
 /-!
 ### B.1. Eigenfunctions
 -/
-
-@[fun_prop]
-lemma _root_.Space.val_hasTemperateGrowth (i : Fin d) :
-    Function.HasTemperateGrowth (Space.val · i) := by
-  simp_rw [← basis_inner]
-  exact Function.hasTemperateGrowth_inner_right _
 
 def coeff (i : Fin d) : ℝ := 1 / √(2 ^ n i * (n i)! * √π * √(Q.ξ i))
 
