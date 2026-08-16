@@ -136,9 +136,11 @@ def ξEquiv : Space d ≃L[ℝ] Space d where
   left_inv _ := by simp
   right_inv _ := by simp
 
-lemma ξEquiv_apply (x : Space d) : Q.ξEquiv x = ⟨fun i ↦ Q.ξ i * x i⟩ := rfl
+@[simp]
+lemma ξEquiv_apply (x : Space d) (i : Fin d) : Q.ξEquiv x i = Q.ξ i * x i := rfl
 
-lemma ξEquiv_symm_apply (x : Space d) : Q.ξEquiv.symm x = ⟨fun i ↦ (Q.ξ i)⁻¹ * x i⟩ := rfl
+@[simp]
+lemma ξEquiv_symm_apply (x : Space d) (i : Fin d) : Q.ξEquiv.symm x i = (Q.ξ i)⁻¹ * x i := rfl
 
 /-!
 ## C. The quadratic potential function

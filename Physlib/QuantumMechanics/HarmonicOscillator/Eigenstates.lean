@@ -109,7 +109,7 @@ lemma eigenfunction_apply :
     Q.eigenfunction n x =
       ∏ i, Q.coeff n i * physHermite (n i) (x i / Q.ξ i) * cexp (-2⁻¹ * (x i / Q.ξ i) ^ 2) := by
   rw [eigenfunction_eq, compCLMOfContinuousLinearEquiv_apply, Function.comp_apply,
-    smulLeftCLM_apply_apply (by fun_prop), ξEquiv_symm_apply]
+    smulLeftCLM_apply_apply (by fun_prop)]
   simp [div_eq_mul_inv, prod_mul_distrib, exp_neg, norm_sq_eq, mul_sum, mul_comm, exp_sum]
 
 /-!
