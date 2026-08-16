@@ -89,10 +89,10 @@ lemma eigenEnergy_strictMono : StrictMono Q.eigenEnergy := by
 ### B.1. Eigenfunctions
 -/
 
-/-- The `i`th normalization constant for `Q.eigenfunction n`, `1 / √(2 ^ nᵢ * nᵢ! * √π * √ξᵢ)`. -/
-def coeff (i : Fin d) : ℝ := 1 / √(2 ^ n i * (n i)! * √π * √(Q.ξ i))
+/-- The `i`th normalization constant for `Q.eigenfunction n`, `1 / √(2 ^ nᵢ * nᵢ! * √π * ξᵢ)`. -/
+def coeff (i : Fin d) : ℝ := 1 / √(2 ^ n i * (n i)! * √π * Q.ξ i)
 
-lemma coeff_eq (i : Fin d) : Q.coeff n i = 1 / √(2 ^ n i * (n i)! * √π * √(Q.ξ i)) := rfl
+lemma coeff_eq (i : Fin d) : Q.coeff n i = 1 / √(2 ^ n i * (n i)! * √π * Q.ξ i) := rfl
 
 /-- The eigenfunction labelled by the integer quantum numbers `n : Fin d → ℕ`, defined as a product
   of (physicist's) Hermite polynomials multiplying a Gaussian with covariance controlled
