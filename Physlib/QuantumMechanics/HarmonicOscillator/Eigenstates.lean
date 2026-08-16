@@ -73,24 +73,6 @@ lemma eigenEnergy_strictMono : StrictMono Q.eigenEnergy := by
 -/
 
 @[fun_prop]
-lemma _root_.Function.HasTemperateGrowth.prod {ι : Type*} [DecidableEq ι] {s : Finset ι}
-    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedCommRing F] [NormedAlgebra ℝ F]
-    {f : ι → E → F} (hf : ∀ i ∈ s, Function.HasTemperateGrowth (f i)) :
-    Function.HasTemperateGrowth (∏ i ∈ s, f i) := by
-  induction s using induction_on' with
-  | empty => exact .const _
-  | insert j t hjs hts hjt ih =>
-    simp_rw [insert_eq, prod_union (disjoint_singleton_left.mpr hjt), prod_singleton]
-    exact .fun_mul (hf j <| mem_insert_self j t) (ih fun i h ↦ hf i <| mem_insert_of_mem h)
-
-@[fun_prop]
-lemma _root_.Function.HasTemperateGrowth.fun_prod {ι : Type*} [DecidableEq ι] {s : Finset ι}
-    {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedCommRing F] [NormedAlgebra ℝ F]
-    {f : ι → E → F} (hf : ∀ i ∈ s, Function.HasTemperateGrowth (f i)) :
-    Function.HasTemperateGrowth (fun x ↦ ∏ i ∈ s, f i x) :=
-  prod_fn s f ▸ Function.HasTemperateGrowth.prod hf
-
-@[fun_prop]
 lemma _root_.Space.val_hasTemperateGrowth (i : Fin d) :
     Function.HasTemperateGrowth (Space.val · i) := by
   simp_rw [← basis_inner]
