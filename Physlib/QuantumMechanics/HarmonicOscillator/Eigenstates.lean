@@ -34,10 +34,10 @@ hyperspherical harmonics. In such cases the energies only depend on the radial q
 
 ## iii. Table of contents
 
-- A. Energy eigenvalues
-- B. Cartesian basis
-  - B.1. Eigenfunctions
-  - B.2. Eigenstates
+- A. Cartesian basis
+  - A.1. Energy eigenvalues
+  - A.2. Eigenfunctions
+  - A.3. Eigenstates
 
 ## iv. References
 
@@ -68,7 +68,11 @@ open scoped Nat Real ComplexConjugate
 variable {d : ℕ} (Q : HarmonicOscillator d) (n n' : Fin d → ℕ) (x : Space d)
 
 /-!
-## A. Energy eigenvalues
+## A. Cartesian basis
+-/
+
+/-!
+## A.1. Energy eigenvalues
 -/
 
 /-- The energy eigenvalues, `∑ i, ℏ ωᵢ (nᵢ + ½)`. -/
@@ -82,11 +86,7 @@ lemma eigenEnergy_strictMono : StrictMono Q.eigenEnergy := by
   exact sum_lt_sum (fun i _ ↦ by simp [h i]) ⟨i, mem_univ i, by simp [hi]⟩
 
 /-!
-## B. Cartesian basis
--/
-
-/-!
-### B.1. Eigenfunctions
+### A.2. Eigenfunctions
 -/
 
 /-- The `i`th normalization constant for `Q.eigenfunction n`, `1 / √(2 ^ nᵢ * nᵢ! * √π * ξᵢ)`. -/
@@ -113,7 +113,7 @@ lemma eigenfunction_apply :
   simp [div_eq_mul_inv, prod_mul_distrib, exp_neg, norm_sq_eq, mul_sum, mul_comm, exp_sum]
 
 /-!
-### B.2. Eigenstates
+### A.3. Eigenstates
 -/
 
 /-- `Q.eigenfunction n` as an element of the Schwartz submodule of the Hilbert space. -/
