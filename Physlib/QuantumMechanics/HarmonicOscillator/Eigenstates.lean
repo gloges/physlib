@@ -10,13 +10,25 @@ public import Physlib.Mathematics.HasTemperateGrowth
 public import Physlib.Mathematics.KroneckerDelta.Basic
 public import Physlib.Mathematics.SpecialFunctions.PhysHermite
 public import Physlib.QuantumMechanics.HarmonicOscillator.Basic
-public import Physlib.QuantumMechanics.HilbertSpaces.SpaceD.SchwartzSubmodule
 public import Physlib.Meta.Sorry
 /-!
 
 # Energy eigenstates of the quantum harmonic oscillator
 
 ## i. Overview
+
+The quantum harmonic oscillator in `d` dimensions is exactly solvable - the energy eigenvalues
+and eigenfunction can be computed analytically.
+
+The ground-state wavefunction is a normalized Gaussian with covariance controlled
+by the harmonic oscillator's characteristic lengths. A general state is then obtained by acting
+on the ground state with the raising operators and is labelled by `d` integer quantum numbers.
+Their wavefunctions are given by products of (physicist's) Hermite polynomials multiplying
+the ground-state Gaussian.
+
+When the potential is isotropic another description of the energy eigenstates is possible;
+energy eigenspaces carry SO(d) representations and eigenfunctions can be written in terms of
+hyperspherical harmonics. In such cases the energies only depend on the radial quantum number.
 
 ## ii. Key results
 
@@ -33,6 +45,9 @@ public import Physlib.Meta.Sorry
 @[expose] public section
 
 TODO "Prove that the QHO eigenstates in the Cartesian basis (Hermite polynomials) are orthonormal."
+
+TODO "Prove that acting on the QHO eigenstates with the ladder operators shifts the integer quantum
+  numbers by one."
 
 TODO "Prove that the QHO eigenstates in the Cartesian basis (Hermite polynomials) satisfy the TISE."
 
@@ -56,6 +71,7 @@ variable {d : ℕ} (Q : HarmonicOscillator d) (n n' : Fin d → ℕ) (x : Space 
 ## A. Energy eigenvalues
 -/
 
+/-- The energy eigenvalues, `∑ i, ℏ ωᵢ (nᵢ + ½)`. -/
 def eigenEnergy : ℝ := ∑ i, ℏ * Q.ω i * (n i + 1 / 2)
 
 lemma eigenEnergy_eq : Q.eigenEnergy n = ∑ i, ℏ * Q.ω i * (n i + 1 / 2) := rfl
@@ -73,10 +89,14 @@ lemma eigenEnergy_strictMono : StrictMono Q.eigenEnergy := by
 ### B.1. Eigenfunctions
 -/
 
+/-- The `i`th normalization constant for `Q.eigenfunction n`, `1 / √(2 ^ nᵢ * nᵢ! * √π * √ξᵢ)`. -/
 def coeff (i : Fin d) : ℝ := 1 / √(2 ^ n i * (n i)! * √π * √(Q.ξ i))
 
 lemma coeff_eq (i : Fin d) : Q.coeff n i = 1 / √(2 ^ n i * (n i)! * √π * √(Q.ξ i)) := rfl
 
+/-- The eigenfunction labelled by the integer quantum numbers `n : Fin d → ℕ`, defined as a product
+  of (physicist's) Hermite polynomials multiplying a Gaussian with covariance controlled
+  by the characteristic lengths, `Q.ξ`. -/
 def eigenfunction : 𝓢(Space d, ℂ) :=
   compCLMOfContinuousLinearEquiv ℂ Q.ξEquiv.symm <|
     smulLeftCLM ℂ (fun x ↦ ∏ i, Q.coeff n i * physHermite (n i) (x i)) (stdGaussian (Space d) ℂ)
@@ -96,16 +116,17 @@ lemma eigenfunction_apply :
 ### B.2. Eigenstates
 -/
 
+/-- `Q.eigenfunction n` as an element of the Schwartz submodule of the Hilbert space. -/
 def eigenstate : SchwartzSubmodule d := schwartzEquiv _ (Q.eigenfunction n)
 
 lemma eigenstate_eq : Q.eigenstate n = schwartzEquiv _ (Q.eigenfunction n) := rfl
 
 /-- The energy eigenstates are orthonormal. -/
 @[simp, sorryful]
-lemma eigenstates_orthonormal : ⟪Q.eigenstate n, Q.eigenstate n'⟫_ℂ = δ[n,n'] :=
+lemma eigenstates_orthonormal : ⟪(Q.eigenstate n : Q.HS), Q.eigenstate n'⟫_ℂ = δ[n,n'] :=
   -- It might help to first prove an analogue of
   -- `MeasureTheory.integral_fin_nat_prod_(volume_)eq_prod` for `Space d` in order to split
-  -- `∫ x : Space d, Π i : Fin d, fᵢ (x i) = ∏ i : Fin d, ∫ xᵢ : ℝ, fᵢ xᵢ`.
+  -- `∫ x : Space d, Π i : Fin d, fᵢ (x i) = ∏ i : Fin d, ∫ xᵢ : ℝ, fᵢ xᵢ`, using `Space.equivPi`.
   sorry
 
 end HarmonicOscillator
