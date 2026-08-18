@@ -90,24 +90,25 @@ lemma eigenEnergy_strictMono : StrictMono Q.eigenEnergy := by
 -/
 
 /-- The `i`th normalization constant for `Q.eigenfunction n`, `1 / √(2 ^ nᵢ * nᵢ! * √π * ξᵢ)`. -/
-def coeff (i : Fin d) : ℝ := 1 / √(2 ^ n i * (n i)! * √π * Q.ξ i)
+def eigenCoeff (i : Fin d) : ℝ := 1 / √(2 ^ n i * (n i)! * √π * Q.ξ i)
 
-lemma coeff_eq (i : Fin d) : Q.coeff n i = 1 / √(2 ^ n i * (n i)! * √π * Q.ξ i) := rfl
+lemma eigenCoeff_eq (i : Fin d) : Q.eigenCoeff n i = 1 / √(2 ^ n i * (n i)! * √π * Q.ξ i) := rfl
 
 /-- The eigenfunction labelled by the integer quantum numbers `n : Fin d → ℕ`, defined as a product
   of (physicist's) Hermite polynomials multiplying a Gaussian with covariance controlled
   by the characteristic lengths, `Q.ξ`. -/
 def eigenfunction : 𝓢(Space d, ℂ) :=
-  compCLMOfContinuousLinearEquiv ℂ Q.ξEquiv.symm <|
-    smulLeftCLM ℂ (fun x ↦ ∏ i, Q.coeff n i * physHermite (n i) (x i)) (stdGaussian (Space d) ℂ)
+  compCLMOfContinuousLinearEquiv ℂ Q.ξEquiv.symm <| smulLeftCLM ℂ
+    (fun x ↦ ∏ i, Q.eigenCoeff n i * physHermite (n i) (x i)) (stdGaussian (Space d) ℂ)
 
 lemma eigenfunction_eq :
     Q.eigenfunction n = compCLMOfContinuousLinearEquiv ℂ Q.ξEquiv.symm (smulLeftCLM ℂ
-      (fun x ↦ ∏ i, Q.coeff n i * physHermite (n i) (x i)) (stdGaussian (Space d) ℂ)) := rfl
+      (fun x ↦ ∏ i, Q.eigenCoeff n i * physHermite (n i) (x i)) (stdGaussian (Space d) ℂ)) := rfl
 
 lemma eigenfunction_apply :
     Q.eigenfunction n x =
-      ∏ i, Q.coeff n i * physHermite (n i) (x i / Q.ξ i) * cexp (-2⁻¹ * (x i / Q.ξ i) ^ 2) := by
+      ∏ i, Q.eigenCoeff n i *
+        physHermite (n i) (x i / Q.ξ i) * cexp (-2⁻¹ * (x i / Q.ξ i) ^ 2) := by
   rw [eigenfunction_eq, compCLMOfContinuousLinearEquiv_apply, Function.comp_apply,
     smulLeftCLM_apply_apply (by fun_prop)]
   simp [div_eq_mul_inv, prod_mul_distrib, exp_neg, norm_sq_eq, mul_sum, mul_comm, exp_sum]
